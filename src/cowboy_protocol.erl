@@ -94,7 +94,8 @@
 %% @doc Start an HTTP protocol process.
 -spec start_link(ranch:ref(), inet:socket(), module(), opts()) -> {ok, pid()}.
 start_link(Ref, Socket, Transport, Opts) ->
-	Pid = spawn_link(?MODULE, init, [Ref, Socket, Transport, Opts]),
+	SpawnOpt = [link | proplists:get_value(spawn_opt, Opts, [])],
+	Pid = spawn_opt(?MODULE, init, [Ref, Socket, Transport, Opts], SpawnOpt),
 	{ok, Pid}.
 
 %% Internal.
